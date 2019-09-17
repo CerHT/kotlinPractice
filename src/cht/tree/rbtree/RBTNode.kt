@@ -2,17 +2,14 @@ package cht.tree.rbtree
 
 /**
  *
- * TODO
+ * 节点类
  * @author chenhantao
  * @since 2019/9/9
  */
-class RBTNode<T : Comparable<T>> {
-    var color: Boolean = true
-    var key: T? = null
-
-    var parent: RBTNode<T>? = null
-    var right: RBTNode<T>? = null
-    var left: RBTNode<T>? = null;
-    
-
-}
+data class RBTNode<T : Comparable<T>>(
+        private var color: Boolean,
+        private var key: T?,
+        var parent: RBTNode<T>?,
+        var right: RBTNode<T>?,
+        var left: RBTNode<T>?
+)

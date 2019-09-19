@@ -9,8 +9,11 @@ package cht.tree.rbtree
 class RBTree<T : Comparable<T>> {
     private var root: RBTNode<T>? = null
 
-    private val RED: Boolean = false
-    private val BLACK: Boolean = true
+    companion object {
+        private const val RED: Boolean = false
+        private const val BLACK: Boolean = true
+    }
+
 
     /**
      * 对红黑树的节点(a)进行左旋转
@@ -91,10 +94,31 @@ class RBTree<T : Comparable<T>> {
     }
 
     // 一些简单的方法，从Java版参考，有些可能不需要
+    private fun parentOf(node: RBTNode<T>?): RBTNode<T>? {
+        return node?.parent
+    }
+
+    private fun isRed(node: RBTNode<T>?): Boolean {
+        return node?.color == RED
+    }
+
+    private fun isBlack(node: RBTNode<T>?): Boolean {
+        return node?.color == BLACK
+    }
+
+    private fun setRed(node: RBTNode<T>?) {
+        node?.color = RED
+    }
+
+    private fun setBlack(node: RBTNode<T>?) {
+        node?.color = BLACK
+    }
+
+    private fun search(key: T): RBTNode<T>? {
+        return this.search(this.root, key)
+    }
     private fun search(node: RBTNode<T>?, key: T): RBTNode<T>? {
-        if (node == null) {
-            return null
-        }
+        node ?: return null
 
         return node.key?.let {
             val temp = key.compareTo(it)

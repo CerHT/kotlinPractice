@@ -14,6 +14,10 @@ class Test {
 fun main() {
     var test: Test = Test()
 
+    val bool: Boolean? = true
+
+    bool?.let { println(123123) }
+
     test.num = 6
     println(compare(test, 5))
 }
@@ -21,12 +25,11 @@ fun main() {
 fun compare(a: Test, b: Int): Int? {
     return a.num?.let {
         val temp = it.compareTo(b)
-        when {
+        return when {
             temp < 0 -> -1
             temp > 0 -> 1
             else -> 0
         }
 
     }
-
 }

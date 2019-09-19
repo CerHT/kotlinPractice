@@ -7,8 +7,8 @@ package cht.tree.rbtree
  * @since 2019/9/9
  */
 data class RBTNode<T : Comparable<T>>(
-        private var color: Boolean,
-        private var key: T?,
+        var color: Boolean,
+        var key: T?,
         var parent: RBTNode<T>?,
         var right: RBTNode<T>?,
         var left: RBTNode<T>?

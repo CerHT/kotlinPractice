@@ -18,6 +18,16 @@ fun main() {
 
     bool?.let { println(123123) }
 
+    var num: Int? = 10
+    num = num?.let {
+
+        if (num == 12) {
+            num = null
+        }
+        num?.plus(1)
+
+    }
+
     test?.num = 6
     //test = null
     println(compare(test, 5))

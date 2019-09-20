@@ -93,18 +93,25 @@ class RBTree<T : Comparable<T>> {
 
     }
 
+
     // 一些简单的方法，从Java版参考，有些可能不需要
-    private fun parentOf(node: RBTNode<T>?): RBTNode<T>? {
-        return node?.parent
+    private fun minNode(node: RBTNode<T>?): RBTNode<T>? {
+        node ?: return null
+        var temp = node
+
+        while (temp?.left != null) {
+            temp = temp.left
+        }
+
+        return temp
     }
 
-    private fun isRed(node: RBTNode<T>?): Boolean {
-        return node?.color == RED
-    }
+    private fun parentOf(node: RBTNode<T>?): RBTNode<T>? = node?.parent
+    
+    private fun isRed(node: RBTNode<T>?): Boolean = node?.color == RED
 
-    private fun isBlack(node: RBTNode<T>?): Boolean {
-        return node?.color == BLACK
-    }
+    private fun isBlack(node: RBTNode<T>?): Boolean = node?.color == BLACK
+
 
     private fun setRed(node: RBTNode<T>?) {
         node?.color = RED
@@ -114,9 +121,8 @@ class RBTree<T : Comparable<T>> {
         node?.color = BLACK
     }
 
-    private fun search(key: T): RBTNode<T>? {
-        return this.search(this.root, key)
-    }
+    private fun search(key: T): RBTNode<T>? = this.search(this.root, key)
+
     private fun search(node: RBTNode<T>?, key: T): RBTNode<T>? {
         node ?: return null
 

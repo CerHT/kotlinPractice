@@ -2,7 +2,7 @@ package cht.anything
 
 /**
  *
- * TODO
+ * 测试语法
  * @author chenhantao
  * @since 2019/9/18
  */
@@ -12,17 +12,20 @@ class Test {
 }
 
 fun main() {
-    var test: Test = Test()
+    var test: Test? = Test()
 
     val bool: Boolean? = true
 
     bool?.let { println(123123) }
 
-    test.num = 6
+    test?.num = 6
+    //test = null
     println(compare(test, 5))
 }
 
-fun compare(a: Test, b: Int): Int? {
+fun compare(a: Test?, b: Int): Int? {
+    a ?: return 0
+
     return a.num?.let {
         val temp = it.compareTo(b)
         return when {

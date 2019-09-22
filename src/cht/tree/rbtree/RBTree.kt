@@ -147,12 +147,147 @@ class RBTree<T : Comparable<T>> {
         // 若父节点存在，且父节点为红色
         var parent: RBTNode<T>? = parentOf(node)
         while (parent != null && isRed(parent)) {
+            // 其实这里的祖父接点是不会为null的，因为根节点不可能为红
             gParent = parentOf(parent)
-            if (parent == gParent)
+            if (parent == gParent?.left) {
+                val uncle: RBTNode<T>? = gParent.right
+                // 1.叔节点为红色
+                if (isRed(uncle)) {
+                    setBlack(parent)
+                    setRed(gParent)
+                    setBlack(uncle)
+                    node = gParent
+                    continue
+                }
+                // 2.叔节点为黑色，且当前节点为右节点
+                if (node == parent.right) {
+                    leftRotate(parent)
+                    val temp: RBTNode<T> = parent
+                    parent = node
+                    node = temp
+                }
+                // 3.叔节点为黑色，且当前节点为左节点
+                setBlack(parent)
+                setRed(gParent)
+                rightRotate(gParent)
+            } else {
+                // 父节点为祖父节点的右节点
+                val uncle: RBTNode<T>? = gParent?.left
+                // 1.叔节点为红色
+                if (isRed(uncle)) {
+                    setBlack(uncle)
+                    setBlack(parent)
+                    setRed(gParent)
+                    node = parent
+                    continue
+                }
+                // 2.叔节点为黑色，且当前节点为左节点
+                if (node == parent.left) {
+                    rightRotate(parent)
+                    val temp: RBTNode<T> = parent
+                    parent = node
+                    node = temp
+                }
 
+                // 3.叔节点为黑色，且当前接点为右节点
+                setBlack(parent)
+                setRed(gParent)
+                // 这里其实不会为空
+                leftRotate(gParent!!)
+            }
+
+            parent = parentOf(parent)
         }
 
+        setBlack(this.root)
+    }
 
+    private fun remove(node: RBTNode<T>) {
+        val child: RBTNode<T>?
+        var parent: RBTNode<T>?
+        val color: Boolean
+
+        // 被删节点的左右子节点都不为空
+        if (node.left != null && node.right != null) {
+            // 用来替代被删除的节点，用该节点代替被删除的节点，然后再删除要删除的节点
+            // 其实是不可能为空的，上面都判断过了，只是省下了下面的!!, !!看起来不太好
+            var replace: RBTNode<T>?
+
+            // 获取后续节点
+            replace = node.right
+            while (replace?.left != null) {
+                replace = replace.left
+            }
+            // node不是根节点，即没有父节点的节点
+            if (parentOf(node) != null) {
+                if (parentOf(node)?.left == node) {
+                    parentOf(node)?.left = replace
+                } else {
+                    parentOf(node)?.right = replace
+                }
+            } else {
+                this.root = replace
+            }
+            // child是后继节点的右子节点，后继节点不存在左子节点
+            child = replace?.right
+            parent = parentOf(replace)
+
+            // 保存取代节点的颜色
+            color = replace?.color ?: BLACK
+
+            // 被删除的节点是后继节点的父节点
+            if (parent == node) {
+                parent = replace
+            } else {
+                // child不为空
+                child?.let { it.parent = parent }
+                parent?.let { it.left = child }
+
+                replace?.right = node.right
+                node.right?.parent = replace
+            }
+            replace?.let {
+                it.parent = node.parent
+                it.color = node.color
+                it.left = node.left
+            }
+            node.left?.parent = replace
+
+            if (color == BLACK) {
+                removeFix(child, parent)
+            }
+
+            return
+        }
+        child = if (node.left != null) {
+            node.left
+        } else {
+            node.right
+        }
+
+        parent = node.parent
+        color = node.color
+
+        child?.let { it.parent = parent }
+
+        // node 不是根节点
+        if (parent != null) {
+            if (parent.left == node) {
+                parent.left = child
+            } else {
+                parent.right = child
+            }
+        } else {
+            this.root = child
+        }
+
+        if (color == BLACK) {
+            removeFix(child, parent)
+        }
+    }
+
+    private fun removeFix(child: RBTNode<T>?, parent: RBTNode<T>?) {
+        
     }
 
     // 一些简单的方法，从Java版参考，有些可能不需要
@@ -168,7 +303,7 @@ class RBTree<T : Comparable<T>> {
     }
 
     private fun parentOf(node: RBTNode<T>?): RBTNode<T>? = node?.parent
-    
+
     private fun isRed(node: RBTNode<T>?): Boolean = node?.color == RED
 
     private fun isBlack(node: RBTNode<T>?): Boolean = node?.color == BLACK

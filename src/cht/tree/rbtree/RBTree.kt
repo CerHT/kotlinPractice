@@ -286,11 +286,22 @@ class RBTree<T : Comparable<T>> {
         }
     }
 
-    private fun removeFix(child: RBTNode<T>?, parent: RBTNode<T>?) {
-        
+    private fun removeFix(childNode: RBTNode<T>?, parentNode: RBTNode<T>?) {
+        var node: RBTNode<T>? = childNode
+        var parent: RBTNode<T>? = parentNode
+
+        // node 的兄弟节点
+        val otherNode: RBTNode<T>?
+
+        while ((node == null || isBlack(node)) && (node != this.root)) {
+            if (parent?.left == node) {
+
+            }
+        }
+
     }
 
-    // 一些简单的方法，从Java版参考，有些可能不需要
+    // 一些简单的方法，从Java版参考，用kotlin的风格来一步完成
     private fun minNode(node: RBTNode<T>?): RBTNode<T>? {
         node ?: return null
         var temp = node

@@ -291,11 +291,31 @@ class RBTree<T : Comparable<T>> {
         var parent: RBTNode<T>? = parentNode
 
         // node 的兄弟节点
-        val otherNode: RBTNode<T>?
+        var otherNode: RBTNode<T>?
 
         while ((node == null || isBlack(node)) && (node != this.root)) {
             if (parent?.left == node) {
+                otherNode = parent?.right
+                if (isRed(otherNode)) {
+                    // 1.node 的兄弟节点是红色
+                    setBlack(otherNode)
+                    setRed(parent)
+                    parent?.let { leftRotate(it) }
+                    otherNode = parent?.right
+                }
 
+                if ((otherNode?.left == null || isBlack(otherNode.left)) && (otherNode?.right == null) || isBlack(otherNode.right)) {
+                    // 2.node的兄弟节点是黑色，且兄弟节点的两个子节点也是黑色
+                    setRed(otherNode)
+                    node = parent
+                    parent = parentOf(node)
+                } else {
+                    if (otherNode.left == null || isBlack(otherNode.left)) {
+                        // 3.node的兄弟节点是黑色，且兄弟节点的左节点是红色，右节点是黑色
+                        setBlack(otherNode.right)
+
+                    }
+                }
             }
         }
 

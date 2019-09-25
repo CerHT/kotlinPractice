@@ -31,6 +31,10 @@ fun main() {
     test?.num = 6
     //test = null
     println(compare(test, 5))
+
+    val map = HashMap<String, Int>()
+    map["1"] = 2
+    testMap(map)
 }
 
 fun compare(a: Test?, b: Int): Int? {
@@ -45,4 +49,9 @@ fun compare(a: Test?, b: Int): Int? {
         }
 
     }
+}
+
+fun testMap(map: HashMap<String, Int>?) {
+    map?.get("1")?.let { map.put("1", it + 3) } ?: map?.put("1", 3)
+    println(map)
 }

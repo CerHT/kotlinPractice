@@ -310,11 +310,27 @@ class RBTree<T : Comparable<T>> {
                     node = parent
                     parent = parentOf(node)
                 } else {
-                    if (otherNode.left == null || isBlack(otherNode.left)) {
+                    if (otherNode.left == null || isBlack(otherNode.right)) {
                         // 3.node的兄弟节点是黑色，且兄弟节点的左节点是红色，右节点是黑色
-                        setBlack(otherNode.right)
-
+                        setBlack(otherNode.left)
+                        setRed(otherNode)
+                        rightRotate(otherNode)
+                        otherNode = parent?.right
                     }
+                    // 4.node的兄弟节点是黑色，并且兄弟节点的右节点是红色，左节点任意颜色
+                    // 吐槽一句，这种写法虽然要用Java来写需要写好多行，但是其实很多是不会为null的，写这种简直有毒，不这样写可以使用 !! 但是强迫症发作
+                    parent?.color?.let { otherNode?.color = it }
+                    setBlack(parent)
+                    setBlack(otherNode?.right)
+                    parent?.let { leftRotate(it) }
+                    node = this.root
+                    break
+                }
+            } else {
+                otherNode = parent?.left
+                if (isRed(otherNode)) {
+                    // 1.node的兄弟节点是红色
+                    setBlack(otherNode)
                 }
             }
         }

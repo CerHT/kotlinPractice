@@ -8,7 +8,6 @@ package cht.sort.array
  */
 class BubbleSort {
     companion object {
-
         fun <T : Comparable<T>> bubbleSortBase(array: Array<T>) {
             if (array.isEmpty()) {
                 println("数组为空")
@@ -27,9 +26,34 @@ class BubbleSort {
                     }
                 }
             }
+            println("耗时：" + (System.currentTimeMillis() - start) + "ms")
+        }
+
+        fun <T : Comparable<T>> bubbleSortUpdateA(array: Array<T>) {
+            if (array.isEmpty()) {
+                println("数组为空")
+                return
+            }
+            val start = System.currentTimeMillis()
+
+            var temp: T
+            for (i in array.indices) {
+                var isChanged: Boolean = false
+                for (j in 0 until array.size - i - 1) {
+                    if (array[j] > array[j + 1]) {
+                        temp = array[j]
+                        array[j] = array[j + 1]
+                        array[j + 1] = temp
+                        isChanged = true;
+                    }
+                }
+                if (!isChanged) {
+                    break
+                }
+            }
 
             println("耗时：" + (System.currentTimeMillis() - start) + "ms")
-
         }
+
     }
 }

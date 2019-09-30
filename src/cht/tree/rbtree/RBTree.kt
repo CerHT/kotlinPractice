@@ -113,9 +113,9 @@ class RBTree<T : Comparable<T>> {
             cmp = sign.key?.let { node.key?.compareTo(it) } ?: 0
             // 如果node < root，则取更小的来比较
             sign = if (cmp < 0) {
-                sign.right
-            } else {
                 sign.left
+            } else {
+                sign.right
             }
         }
         // 对比过后，找到node的位置,将node的设置在某个节点下
@@ -331,14 +331,48 @@ class RBTree<T : Comparable<T>> {
                 if (isRed(otherNode)) {
                     // 1.node的兄弟节点是红色
                     setBlack(otherNode)
+                    setRed(parent)
+                    parent?.let { rightRotate(it) }
+                    otherNode = parent?.left
+                }
+
+                if ((otherNode?.left == null || isBlack(otherNode.left)) && (otherNode?.right == null || isBlack(otherNode.right))) {
+                    // 2.node的兄弟节点是黑色，且兄弟节点的两个子节点也都是黑色
+                    setRed(otherNode)
+                    node = parent
+                    parent = parentOf(node)
+                } else {
+                    if (otherNode.left == null || isBlack(otherNode.left)) {
+                        // 3.node的兄弟节点是黑色，且兄弟节点的左节点是红色，右节点是黑色
+                        setBlack(otherNode.right)
+                        setRed(otherNode)
+                        leftRotate(otherNode)
+                        otherNode = parent?.left
+                    }
+                    // 4. node的兄弟节点是黑色，且兄弟节点的右节点是红色，左节点任意
+                    parent?.color?.let { otherNode?.color = it }
+                    setBlack(parent)
+                    setBlack(otherNode?.left)
+                    parent?.let { rightRotate(it) }
+                    node = this.root
+                    break
                 }
             }
         }
+        node?.let { setBlack(it) }
+    }
 
+    fun insert(key: T) {
+        val node: RBTNode<T> = RBTNode(key, RED, null, null, null)
+        insert(node)
+    }
+
+    fun remove(key: T) {
+        this.search(key)?.let { remove(it) }
     }
 
     // 一些简单的方法，从Java版参考，用kotlin的风格来一步完成
-    private fun minNode(node: RBTNode<T>?): RBTNode<T>? {
+    fun minNode(node: RBTNode<T>?): RBTNode<T>? {
         node ?: return null
         var temp = node
 
@@ -347,6 +381,66 @@ class RBTree<T : Comparable<T>> {
         }
 
         return temp
+    }
+
+    fun maxNode(node: RBTNode<T>?): RBTNode<T>? {
+        node ?: return null
+
+        var temp = node
+        while (temp?.right != null) {
+            temp = temp.right
+        }
+        return temp
+    }
+
+    fun preOrder() {
+        this.preOrder(this.root)
+    }
+
+    private fun preOrder(rbtNode: RBTNode<T>?) {
+        rbtNode?.let {
+            print("${rbtNode.key} ")
+            preOrder(rbtNode.left)
+            preOrder(rbtNode.right)
+        }
+    }
+
+    fun inOrder() {
+        this.inOrder(this.root)
+    }
+
+    private fun inOrder(rbtNode: RBTNode<T>?) {
+        rbtNode?.let {
+            inOrder(rbtNode.left)
+            print("${rbtNode.key} ")
+            inOrder(rbtNode.right)
+        }
+    }
+
+    fun postOrder() {
+        this.postOrder(this.root)
+    }
+
+    private fun postOrder(rbtNode: RBTNode<T>?) {
+        rbtNode?.let {
+            postOrder(rbtNode.left)
+            postOrder(rbtNode.right)
+            print("${rbtNode.key} ")
+        }
+    }
+
+    fun order() {
+        println("前序遍历: ")
+        this.preOrder()
+        println()
+
+        println("中序遍历: ")
+        this.inOrder()
+        println()
+
+        println("后序遍历: ")
+        this.postOrder()
+        println()
     }
 
     private fun parentOf(node: RBTNode<T>?): RBTNode<T>? = node?.parent

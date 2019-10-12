@@ -7,7 +7,7 @@ package cht.queen
  * @since 2019/10/8
  */
 class Queen(private val max_size: Int) {
-    private val chessBoard: Array<IntArray> = Array(max_size) { IntArray(max_size) }
+    private val chessBoard: Array<IntArray> = Array(max_size) { kotlin.IntArray(max_size) }
 
     private fun check(x: Int, y: Int): Boolean {
         for (i in 0 until y) {
@@ -25,5 +25,13 @@ class Queen(private val max_size: Int) {
             }
         }
         return true
+    }
+
+    fun settleQueen(y: Int): Boolean {
+        // 行数超过最大，说明已经找到答案
+        if (y == max_size) {
+            return true
+        }
+        // 遍历当前行，逐一格子验证
     }
 }

@@ -9,13 +9,17 @@ package cht.queen
 class Queen(private val max_size: Int) {
     private val chessBoard: Array<IntArray> = Array(max_size) { kotlin.IntArray(max_size) }
 
+    init {
+        settleQueen(0)
+    }
+
     private fun check(x: Int, y: Int): Boolean {
         for (i in 0 until y) {
             // 纵向检查
             if (chessBoard[x][i] == 1) {
                 return false
             }
-            // 检查左侧斜向 
+            // 检查左侧斜向
             if (x - 1 - i >= 0 && chessBoard[x - 1 - i][y - 1 - i] == 1) {
                 return false
             }
@@ -25,10 +29,6 @@ class Queen(private val max_size: Int) {
             }
         }
         return true
-    }
-
-    fun init() {
-        settleQueen(0)
     }
 
     private fun settleQueen(y: Int): Boolean {
@@ -54,5 +54,12 @@ class Queen(private val max_size: Int) {
         return false
     }
 
-
+    fun printQueen() {
+        for (i in 0 until max_size) {
+            for (j in 0 until max_size) {
+                print("${chessBoard[i][j]} ")
+            }
+            println()
+        }
+    }
 }

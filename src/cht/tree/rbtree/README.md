@@ -128,13 +128,13 @@
 
 ##### 后续
 >相同的代码，kotlin比Java快?
-> ![kotlin](./kotlin.png)  
+> ![kotlin](pictures/kotlin.png)  
 >  
-> ![java](./java.png)
+> ![java](pictures/java.png)
 
 ##### 后续++
 >Java还是要快一点？主要是stream耗时太久
-> ![java1](./java1.png)
+> ![java1](pictures/java1.png)
 
 ##### 后续+++
 >后续又试了10000和100000随机数填充数组，对比了`for`循环和`stream.foreach`的速度，发现相差不是特别大（图就不贴了，大概是2400对比2500的样子，ps: kotlin大致也是2500左右），通过网上查找，`Stream`是用多线程处理的（该点待续，还没有彻底搞明白），所以之前基数少的时候创建多线程会耗时更多

@@ -12,6 +12,8 @@ class Test {
 }
 
 fun main() {
+    val user = User("a", 10)
+    val account = Account("test123", "1234")
     var test: Test? = Test()
 
     val bool: Boolean? = true
